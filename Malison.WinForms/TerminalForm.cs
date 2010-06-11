@@ -25,6 +25,7 @@ namespace Malison.WinForms
                 if (value == null) throw new ArgumentNullException("value");
 
                 mTerminalControl.Terminal = value;
+                ResizeToFitTerminal();
             }
         }
 
