@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C# Express 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Malison.Core", "Malison.Core\Malison.Core.csproj", "{235B2863-1D31-44B9-94E6-1C0CED781258}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Malison.WinForms", "Malison.WinForms\Malison.WinForms.csproj", "{232612DD-C17D-405C-AE9B-98A9F95512BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Malison.ExampleApp", "Malison.ExampleApp\Malison.ExampleApp.csproj", "{D1885C48-38F0-45ED-BC1D-CC44D1FA690D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{235B2863-1D31-44B9-94E6-1C0CED781258}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{235B2863-1D31-44B9-94E6-1C0CED781258}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{235B2863-1D31-44B9-94E6-1C0CED781258}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{235B2863-1D31-44B9-94E6-1C0CED781258}.Release|Any CPU.Build.0 = Release|Any CPU
+		{232612DD-C17D-405C-AE9B-98A9F95512BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{232612DD-C17D-405C-AE9B-98A9F95512BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{232612DD-C17D-405C-AE9B-98A9F95512BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{232612DD-C17D-405C-AE9B-98A9F95512BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1885C48-38F0-45ED-BC1D-CC44D1FA690D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1885C48-38F0-45ED-BC1D-CC44D1FA690D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1885C48-38F0-45ED-BC1D-CC44D1FA690D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1885C48-38F0-45ED-BC1D-CC44D1FA690D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
