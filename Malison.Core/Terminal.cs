@@ -19,18 +19,23 @@ namespace Malison.Core
             mCharacters.Fill(new Character(' '));
         }
 
-        protected override Character GetValue(Vec pos)
+        protected override Character GetValueCore(Vec pos)
         {
             return mCharacters[pos];
         }
 
-        protected override bool SetValue(Vec pos, Character value)
+        protected override bool SetValueCore(Vec pos, Character value)
         {
             // don't do anything if the value doesn't change
             if (mCharacters[pos].Equals(value)) return false;
 
             mCharacters[pos] = value;
             return true;
+        }
+
+        internal override ITerminal CreateWindowCore(TermColor foreColor, TermColor backColor, Rect bounds)
+        {
+            return new WindowTerminal(this, foreColor, backColor, bounds);
         }
 
         private readonly Array2D<Character> mCharacters;

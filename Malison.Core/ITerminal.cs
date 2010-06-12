@@ -6,7 +6,7 @@ using Bramble.Core;
 
 namespace Malison.Core
 {
-    public interface IWriter
+    public interface ITerminal : IReadableTerminal
     {
         void Write(char ascii);
         void Write(Glyph glyph);
@@ -23,28 +23,16 @@ namespace Malison.Core
 
         void DrawBox(bool isDouble, bool isContinue);
 
-        ITerminal CreateWindow();
-        ITerminal CreateWindow(Rect bounds);
-    }
+        ITerminal this[TermColor foreColor] { get; }
+        ITerminal this[TermColor foreColor, TermColor backColor] { get; }
+        ITerminal this[ColorPair color] { get; }
 
-    public interface IWriterColor : IWriter
-    {
-        IWriter this[TermColor foreColor] { get; }
-        IWriter this[TermColor foreColor, TermColor backColor] { get; }
-        IWriter this[ColorPair color] { get; }
-    }
+        ITerminal this[Vec pos] { get; }
+        ITerminal this[int x, int y] { get; }
+        ITerminal this[Rect rect] { get; }
+        ITerminal this[Vec pos, Vec size] { get; }
+        ITerminal this[int x, int y, int width, int height] { get; }
 
-    public interface IWriterPosColor : IWriterColor
-    {
-        IWriterColor this[Vec pos] { get; }
-        IWriterColor this[int x, int y] { get; }
-        IWriterColor this[Rect rect] { get; }
-        IWriterColor this[Vec pos, Vec size] { get; }
-        IWriterColor this[int x, int y, int width, int height] { get; }
-    }
-
-    public interface ITerminal : IReadableTerminal, IWriterPosColor
-    {
         void Set(Vec pos, Character value);
         void Set(int x, int y, Character value);
     }

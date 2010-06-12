@@ -62,13 +62,13 @@ namespace Malison.Core
             // parse the fore color
             if (parts.Length > 1)
             {
-                foreColor = TerminalColors.FromName(parts[0]);
+                foreColor = TermColors.FromName(parts[0]);
             }
 
             // parse the back color
             if (parts.Length > 2)
             {
-                backColor = TerminalColors.FromName(parts[1]);
+                backColor = TermColors.FromName(parts[1]);
             }
 
             return new Character(glyph, foreColor, backColor);

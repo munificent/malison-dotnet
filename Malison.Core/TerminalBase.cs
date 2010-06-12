@@ -8,8 +8,7 @@ namespace Malison.Core
 {
     public abstract class TerminalBase : ITerminal
     {
-        public TerminalBase()
-            : this(TermColor.White, TermColor.Black)
+        public TerminalBase() : this(TermColor.White, TermColor.Black)
         {
         }
 
@@ -30,7 +29,7 @@ namespace Malison.Core
 
         public Character Get(Vec pos)
         {
-            return GetValue(FlipNegativePosition(pos));
+            return GetValueCore(FlipNegativePosition(pos));
         }
 
         public Character Get(int x, int y)
@@ -52,58 +51,52 @@ namespace Malison.Core
             Set(new Vec(x, y), value);
         }
 
-        #endregion
-
-        #region IWriterPosColor Members
-
-        public IWriterColor this[Vec pos]
+        public ITerminal this[Vec pos]
         {
             // if we aren't given a size, go all the way to the bottom-right corner of the terminal
             get { return this[pos, Size - pos]; }
         }
 
-        public IWriterColor this[int x, int y]
+        public ITerminal this[int x, int y]
         {
             get { return this[new Vec(x, y)]; }
         }
 
-        public IWriterColor this[Rect rect]
+        public ITerminal this[Rect rect]
         {
-            get { return new WindowTerminal(this, ForeColor, BackColor, new Rect(FlipNegativePosition(rect.Position), rect.Size)); }
+            get
+            {
+                return CreateWindowCore(ForeColor, BackColor, new Rect(FlipNegativePosition(rect.Position), rect.Size));
+            }
         }
 
-        public IWriterColor this[Vec pos, Vec size]
+        public ITerminal this[Vec pos, Vec size]
         {
             get { return this[new Rect(pos, size)]; }
         }
 
-        public IWriterColor this[int x, int y, int width, int height]
+        public ITerminal this[int x, int y, int width, int height]
         {
             get { return this[new Rect(x, y, width, height)]; }
         }
 
-        #endregion
-
-        #region IWriterColor Members
-
-        public IWriter this[TermColor foreColor, TermColor backColor]
+        public ITerminal this[TermColor foreColor, TermColor backColor]
         {
-            get { return new WindowTerminal(this, foreColor, backColor, new Rect(Size)); }
+            get
+            {
+                return CreateWindowCore(foreColor, backColor, new Rect(Size));
+            }
         }
 
-        public IWriter this[ColorPair color]
+        public ITerminal this[ColorPair color]
         {
             get { return this[color.Fore, color.Back]; }
         }
 
-        public IWriter this[TermColor foreColor]
+        public ITerminal this[TermColor foreColor]
         {
             get { return this[foreColor, BackColor]; }
         }
-
-        #endregion
-
-        #region IWriter Members
 
         public void Write(char ascii)
         {
@@ -200,7 +193,7 @@ namespace Malison.Core
                     else
                     {
                         // nothing to scroll onto this char, so clear it
-                        Set(to, scrollOnCallback(to)); /* new Character(Glyph.Space)); */
+                        Set(to, scrollOnCallback(to));
                     }
                 }
             }
@@ -294,21 +287,11 @@ namespace Malison.Core
             }
         }
 
-        public ITerminal CreateWindow()
-        {
-            return new WindowTerminal(this, ForeColor, BackColor, new Rect(Size));
-        }
-
-        public ITerminal CreateWindow(Rect bounds)
-        {
-            return new WindowTerminal(this, ForeColor, BackColor, bounds);
-        }
-
         #endregion
 
         internal bool SetInternal(Vec pos, Character value)
         {
-            if (SetValue(pos, value))
+            if (SetValueCore(pos, value))
             {
                 if (CharacterChanged != null) CharacterChanged(this, new CharacterEventArgs(value, pos));
                 return true;
@@ -317,8 +300,22 @@ namespace Malison.Core
             return false;
         }
 
-        protected abstract Character GetValue(Vec pos);
-        protected abstract bool SetValue(Vec pos, Character value);
+        /// <summary>
+        /// Override this to get the <see cref="Character"/> at the given position in the terminal.
+        /// </summary>
+        /// <param name="pos">The position of the character to retrieve. Must be in bounds.</param>
+        /// <returns>The character at that position.</returns>
+        protected abstract Character GetValueCore(Vec pos);
+
+        /// <summary>
+        /// Override this to set the <see cref="Character"/> at the given position in the terminal.
+        /// </summary>
+        /// <param name="pos">The position of the character to write.</param>
+        /// <param name="value">The character to write to the terminal.</param>
+        /// <returns><c>true</c> if the character is different from what was already there.</returns>
+        protected abstract bool SetValueCore(Vec pos, Character value);
+
+        internal abstract ITerminal CreateWindowCore(TermColor foreColor, TermColor backColor, Rect bounds);
 
         private Vec FlipNegativePosition(Vec pos)
         {

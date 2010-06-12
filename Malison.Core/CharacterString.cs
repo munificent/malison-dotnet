@@ -55,7 +55,7 @@ namespace Malison.Core
                     }
                     else
                     {
-                        foreColor = TerminalColors.FromEscapeChar(c);
+                        foreColor = TermColors.FromEscapeChar(c);
                     }
                     waitingForColor = false;
                 }
