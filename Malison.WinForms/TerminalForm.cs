@@ -30,23 +30,30 @@ namespace Malison.WinForms
         }
 
         public TerminalForm()
+            : this(new Terminal(80, 25))
         {
-            InitializeComponent();
         }
 
         public TerminalForm(ITerminal terminal)
-            : this()
         {
             if (terminal == null) throw new ArgumentNullException("terminal");
 
+            InitializeComponent();
+
             mTerminalControl.Terminal = terminal;
-            ResizeToFitTerminal();
         }
 
         public TerminalForm(string text, int width, int height)
             : this(new Terminal(width, height))
         {
             Text = text;
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            ResizeToFitTerminal();
         }
 
         private void ResizeToFitTerminal()

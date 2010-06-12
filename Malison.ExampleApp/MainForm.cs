@@ -23,17 +23,17 @@ namespace Malison.ExampleApp
         {
             base.OnLoad(e);
 
-            Terminal = new Terminal(80, 30);
-
             Terminal[2, 2].Write("Hi, this is an example app.");
 
             Terminal[2, 4].Write("Here are some lines and boxes:");
             Terminal[4, 6, 6, 3][TermColor.Red].DrawBox(false, true);
             Terminal[12, 6, 6, 3][TermColor.Green].DrawBox(true, true);
-            Terminal[20, 6, 1, 3][TermColor.Blue].DrawBox(false, false);
-            Terminal[21, 6, 1, 3][TermColor.Blue].DrawBox(false, true);
-            Terminal[22, 6, 1, 3][TermColor.Blue].DrawBox(true, false);
-            Terminal[23, 6, 1, 3][TermColor.Blue].DrawBox(true, true);
+
+            ITerminal blueTerm = Terminal[TermColor.Blue];
+            blueTerm[20, 6, 1, 3].DrawBox(false, false);
+            blueTerm[21, 6, 1, 3].DrawBox(false, true);
+            blueTerm[22, 6, 1, 3].DrawBox(true, false);
+            blueTerm[23, 6, 1, 3].DrawBox(true, true);
 
             Terminal[2, 10].Write("Because this is tailored for games, there's some fun glyphs in here:");
             Glyph[] glyphs = new Glyph[]
