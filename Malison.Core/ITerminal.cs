@@ -6,6 +6,15 @@ using Bramble.Core;
 
 namespace Malison.Core
 {
+    public enum DrawBoxOptions
+    {
+        None          = 0x0,
+        DoubleLines   = 0x1,
+        ContinueLines = 0x2,
+
+        Default = ContinueLines
+    }
+
     public interface ITerminal : IReadableTerminal
     {
         void Write(char ascii);
@@ -21,7 +30,8 @@ namespace Malison.Core
 
         void Fill(Glyph glyph);
 
-        void DrawBox(bool isDouble, bool isContinue);
+        void DrawBox();
+        void DrawBox(DrawBoxOptions options);
 
         ITerminal this[TermColor foreColor] { get; }
         ITerminal this[TermColor foreColor, TermColor backColor] { get; }

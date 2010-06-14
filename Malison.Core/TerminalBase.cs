@@ -218,17 +218,22 @@ namespace Malison.Core
             }
         }
 
-        public void DrawBox(bool isDouble, bool isContinue)
+        public void DrawBox()
+        {
+            DrawBox(DrawBoxOptions.Default);
+        }
+
+        public void DrawBox(DrawBoxOptions options)
         {
             Vec pos = Vec.Zero;
 
             if (Size.X == 1)
             {
-                DrawVerticalLine(pos, Size.Y, isDouble, isContinue);
+                DrawVerticalLine(pos, Size.Y, options);
             }
             else if (Size.Y == 1)
             {
-                DrawHorizontalLine(pos, Size.X, isDouble, isContinue);
+                DrawHorizontalLine(pos, Size.X, options);
             }
             else
             {
@@ -240,7 +245,7 @@ namespace Malison.Core
                 Glyph horizontal;
                 Glyph vertical;
 
-                if (isDouble)
+                if ((options & DrawBoxOptions.DoubleLines) == DrawBoxOptions.DoubleLines)
                 {
                     topLeft = Glyph.BarDoubleDownRight;
                     topRight = Glyph.BarDoubleDownLeft;
@@ -326,18 +331,18 @@ namespace Malison.Core
             return pos;
         }
 
-        private void DrawHorizontalLine(Vec pos, int length, bool isDouble, bool isContinue)
+        private void DrawHorizontalLine(Vec pos, int length, DrawBoxOptions options)
         {
             // figure out which glyphs to use
             Glyph left = Glyph.BarRight;
             Glyph middle = Glyph.BarLeftRight;
             Glyph right = Glyph.BarLeft;
 
-            if (isDouble)
+            if ((options & DrawBoxOptions.DoubleLines) == DrawBoxOptions.DoubleLines)
             {
                 middle = Glyph.BarDoubleLeftRight;
 
-                if (isContinue)
+                if ((options & DrawBoxOptions.ContinueLines) == DrawBoxOptions.ContinueLines)
                 {
                     left = Glyph.BarDoubleLeftRight;
                     right = Glyph.BarDoubleLeftRight;
@@ -350,7 +355,7 @@ namespace Malison.Core
             }
             else
             {
-                if (isContinue)
+                if ((options & DrawBoxOptions.ContinueLines) == DrawBoxOptions.ContinueLines)
                 {
                     left = Glyph.BarLeftRight;
                     right = Glyph.BarLeftRight;
@@ -370,18 +375,18 @@ namespace Malison.Core
             }
         }
 
-        private void DrawVerticalLine(Vec pos, int length, bool isDouble, bool isContinue)
+        private void DrawVerticalLine(Vec pos, int length, DrawBoxOptions options)
         {
             // figure out which glyphs to use
             Glyph top = Glyph.BarDown;
             Glyph middle = Glyph.BarUpDown;
             Glyph bottom = Glyph.BarUp;
 
-            if (isDouble)
+            if ((options & DrawBoxOptions.DoubleLines) == DrawBoxOptions.DoubleLines)
             {
                 middle = Glyph.BarDoubleUpDown;
 
-                if (isContinue)
+                if ((options & DrawBoxOptions.ContinueLines) == DrawBoxOptions.ContinueLines)
                 {
                     top = Glyph.BarDoubleUpDown;
                     bottom = Glyph.BarDoubleUpDown;
@@ -394,7 +399,7 @@ namespace Malison.Core
             }
             else
             {
-                if (isContinue)
+                if ((options & DrawBoxOptions.ContinueLines) == DrawBoxOptions.ContinueLines)
                 {
                     top = Glyph.BarUpDown;
                     bottom = Glyph.BarUpDown;

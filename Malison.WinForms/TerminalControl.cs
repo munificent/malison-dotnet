@@ -14,6 +14,26 @@ namespace Malison.WinForms
 {
     public partial class TerminalControl : UserControl
     {
+        public TerminalControl()
+        {
+            InitializeComponent();
+
+            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            SetStyle(ControlStyles.UserPaint, true);
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            SetStyle(ControlStyles.Opaque, true);
+
+            mGlyphSheet = GlyphSheet.Terminal7x10;
+
+            HideCursor = true;
+        }
+
+        /// <summary>
+        /// Gets and sets whether or not the cursor should be hidden when it hovers of the control.
+        /// </summary>
+        [Description("Whether or not the cursor should be hidden when over this control.")]
+        public bool HideCursor { get; set; }
+
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public ITerminal Terminal
@@ -54,23 +74,11 @@ namespace Malison.WinForms
             }
         }
 
-        public TerminalControl()
-        {
-            InitializeComponent();
-
-            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            SetStyle(ControlStyles.UserPaint, true);
-            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
-            SetStyle(ControlStyles.Opaque, true);
-
-            mGlyphSheet = GlyphSheet.Terminal7x10;
-        }
-
         public override Size GetPreferredSize(Size proposedSize)
         {
             return new Size(
-                (mGlyphSheet.Width * mTerminal.Size.X) + (mPadding * 2),
-                (mGlyphSheet.Height * mTerminal.Size.Y) + (mPadding * 2));
+                (mGlyphSheet.Width * mTerminal.Size.X) + (Padding * 2),
+                (mGlyphSheet.Height * mTerminal.Size.Y) + (Padding * 2));
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -80,10 +88,10 @@ namespace Malison.WinForms
             if (mTerminal != null)
             {
                 // only refresh characters in the clip rect
-                int left = Math.Max(0, (e.ClipRectangle.Left - mPadding) / mGlyphSheet.Width);
-                int top = Math.Max(0, (e.ClipRectangle.Top - mPadding) / mGlyphSheet.Height);
-                int right = Math.Min(mTerminal.Size.X, (e.ClipRectangle.Right - mPadding) / mGlyphSheet.Width + 1);
-                int bottom = Math.Min(mTerminal.Size.Y, (e.ClipRectangle.Bottom - mPadding) / mGlyphSheet.Height + 1);
+                int left = Math.Max(0, (e.ClipRectangle.Left - Padding) / mGlyphSheet.Width);
+                int top = Math.Max(0, (e.ClipRectangle.Top - Padding) / mGlyphSheet.Height);
+                int right = Math.Min(mTerminal.Size.X, (e.ClipRectangle.Right - Padding) / mGlyphSheet.Width + 1);
+                int bottom = Math.Min(mTerminal.Size.Y, (e.ClipRectangle.Bottom - Padding) / mGlyphSheet.Height + 1);
 
                 for (int y = top; y < bottom; y++)
                 {
@@ -94,29 +102,29 @@ namespace Malison.WinForms
                         // fill the background if needed
                         if (!character.BackColor.Equals(Color.Black))
                         {
-                            int fillLeft = (x * mGlyphSheet.Width) + mPadding;
-                            int fillTop = (y * mGlyphSheet.Height) + mPadding;
+                            int fillLeft = (x * mGlyphSheet.Width) + Padding;
+                            int fillTop = (y * mGlyphSheet.Height) + Padding;
                             int width = mGlyphSheet.Width;
                             int height = mGlyphSheet.Height;
 
                             // fill past the padding on the edges
                             if (x == 0)
                             {
-                                fillLeft -= mPadding;
-                                width += mPadding;
+                                fillLeft -= Padding;
+                                width += Padding;
                             }
                             if (x == mTerminal.Size.X - 1)
                             {
-                                width += mPadding;
+                                width += Padding;
                             }
                             if (y == 0)
                             {
-                                fillTop -= mPadding;
-                                height += mPadding;
+                                fillTop -= Padding;
+                                height += Padding;
                             }
                             if (y == mTerminal.Size.Y - 1)
                             {
-                                height += mPadding;
+                                height += Padding;
                             }
 
                             e.Graphics.FillRectangle(new SolidBrush(character.BackColor.ToSystemColor()),
@@ -125,8 +133,8 @@ namespace Malison.WinForms
 
                         // draw the glyph
                         mGlyphSheet.Draw(e.Graphics,
-                            (x * mGlyphSheet.Width) + mPadding,
-                            (y * mGlyphSheet.Height) + mPadding,
+                            (x * mGlyphSheet.Width) + Padding,
+                            (y * mGlyphSheet.Height) + Padding,
                             character);
                     }
                 }
@@ -137,14 +145,20 @@ namespace Malison.WinForms
         {
             base.OnMouseEnter(e);
 
-            Cursor.Hide();
+            if (HideCursor)
+            {
+                Cursor.Hide();
+            }
         }
 
         protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseLeave(e);
 
-            Cursor.Show();
+            if (HideCursor)
+            {
+                Cursor.Show();
+            }
         }
 
         protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
@@ -162,27 +176,27 @@ namespace Malison.WinForms
         {
             int width = mGlyphSheet.Width;
             int height = mGlyphSheet.Height;
-            int left = (pos.X * width) + mPadding;
-            int top = (pos.Y * height) + mPadding;
+            int left = (pos.X * width) + Padding;
+            int top = (pos.Y * height) + Padding;
 
             // fill past the padding on the edges
             if (pos.X == 0)
             {
-                left -= mPadding;
-                width += mPadding;
+                left -= Padding;
+                width += Padding;
             }
             if (pos.X == mTerminal.Size.X - 1)
             {
-                width += mPadding;
+                width += Padding;
             }
             if (pos.Y == 0)
             {
-                top -= mPadding;
-                height += mPadding;
+                top -= Padding;
+                height += Padding;
             }
             if (pos.Y == mTerminal.Size.Y - 1)
             {
-                height += mPadding;
+                height += Padding;
             }
 
             // invalidate the rect under the character
@@ -194,7 +208,7 @@ namespace Malison.WinForms
             InvalidateCharacter(e.Position);
         }
 
-        private int mPadding = 2;
+        private const int Padding = 2;
 
         private GlyphSheet mGlyphSheet;
         private ITerminal mTerminal;
